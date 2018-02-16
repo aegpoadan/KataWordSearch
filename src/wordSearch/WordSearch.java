@@ -56,14 +56,28 @@ public class WordSearch {
 	}
 	
 	private void loadWordMap() {
-		for(int i=0; i<numRows; i++) {
-			for(int j=0; j<numColumns; j++) {
+		for(int x=0; x<numRows; x++) {
+			for(int y=0; y<numColumns; y++) {
 				getHorionztalWords(new LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>>(), 
-						new StringBuilder(), i, j);
+						new StringBuilder(), x, y);
+				getVerticalWords(new LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>>(), 
+						new StringBuilder(), x, y);
 			}
 		}
 	}
 	
+	private Set<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>>
+		getVerticalWords(LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>> currentSet,
+			StringBuilder currentWord, int x, int y) {
+		if(y >= numRows) {
+			return currentSet;
+		}
+
+		addEntryToMap(currentSet, currentWord, x, y);
+		
+		return getVerticalWords(currentSet, currentWord, x, y+1);
+	}
+
 	private Set<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>> 
 		getHorionztalWords(LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>> currentSet, 
 				StringBuilder currentWord, int x, int y) {
