@@ -59,7 +59,14 @@ public class WordSearch {
 	}
 	
 	public String getWordsToSearchForString() {
-		return null;
+		StringBuilder result = new StringBuilder();
+		
+		for(String word: wordsToSearchFor) {
+			result.append(word + ",");
+		}
+		result.deleteCharAt(result.length() - 1);
+		
+		return result.toString();
 	}
 
 }
