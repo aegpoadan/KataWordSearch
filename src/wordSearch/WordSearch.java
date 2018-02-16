@@ -60,6 +60,7 @@ public class WordSearch {
 				getVerticalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 				getVerticalReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 				getDiagonalAscendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+				getDiagonalAscendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 				getDiagonalDescendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 			}
 		}
@@ -67,12 +68,22 @@ public class WordSearch {
 	
 	private void getDiagonalAscendingWords(ArrayList<Pair<Integer, Integer>> lastCoords,
 			StringBuilder currentWord, int x, int y) {
-		if(y <= 0 || x >= numColumns) {
+		if(y < 0 || x >= numColumns) {
 			return;
 		}
 
 		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
 		getDiagonalAscendingWords(lastCoords, currentWord, x+1, y-1);
+	}
+	
+	private void getDiagonalAscendingReverseWords(ArrayList<Pair<Integer, Integer>> lastCoords,
+			StringBuilder currentWord, int x, int y) {
+		if(y >= numRows || x < 0) {
+			return;
+		}
+
+		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
+		getDiagonalAscendingReverseWords(lastCoords, currentWord, x-1, y+1);
 	}
 	
 	private void getDiagonalDescendingWords(ArrayList<Pair<Integer, Integer>> lastCoords,
@@ -85,7 +96,8 @@ public class WordSearch {
 		getDiagonalDescendingWords(lastCoords, currentWord, x+1, y+1);
 	}
 
-	private void getVerticalWords(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
+	private void getVerticalWords(ArrayList<Pair<Integer, Integer>> lastCoords, 
+			StringBuilder currentWord, int x, int y) {
 		if(y >= numRows) {
 			return;
 		}
@@ -94,8 +106,9 @@ public class WordSearch {
 		getVerticalWords(lastCoords, currentWord, x, y+1);
 	}
 
-	private void getVerticalReverseWords(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
-		if(y <= 0) {
+	private void getVerticalReverseWords(ArrayList<Pair<Integer, Integer>> lastCoords, 
+			StringBuilder currentWord, int x, int y) {
+		if(y < 0) {
 			return;
 		}
 
@@ -103,7 +116,8 @@ public class WordSearch {
 		getVerticalReverseWords(lastCoords, currentWord, x, y-1);
 	}
 	
-	private void getHorionztalWords(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
+	private void getHorionztalWords(ArrayList<Pair<Integer, Integer>> lastCoords, 
+			StringBuilder currentWord, int x, int y) {
 		if(x >= numColumns) {
 			return;
 		}
@@ -112,8 +126,9 @@ public class WordSearch {
 		getHorionztalWords(lastCoords, currentWord, x+1, y);
 	}
 	
-	private void getHorionztalReverseWords(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
-		if(x <= 0) {
+	private void getHorionztalReverseWords(ArrayList<Pair<Integer, Integer>> lastCoords, 
+			StringBuilder currentWord, int x, int y) {
+		if(x < 0) {
 			return;
 		}
 
@@ -121,7 +136,8 @@ public class WordSearch {
 		getHorionztalReverseWords(lastCoords, currentWord, x-1, y);
 	}
 	
-	private ArrayList<Pair<Integer, Integer>> addEntryToMap(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
+	private ArrayList<Pair<Integer, Integer>> addEntryToMap(ArrayList<Pair<Integer, Integer>> lastCoords, 
+			StringBuilder currentWord, int x, int y) {
 		Character currentChar = boggleBoard.get(y).get(x);
 		currentWord.append(currentChar);
 		String key = new String(currentWord.toString());

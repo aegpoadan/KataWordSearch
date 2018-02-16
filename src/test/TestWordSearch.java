@@ -61,12 +61,13 @@ public class TestWordSearch {
 		String searchResult = wordSearchTest.findWord("KHAN");
 		assert(searchResult.equals(TestWordSearchStrings.firstVerticalReverseCorrectResult));
 	}
-	/*
+	
 	@Test
 	public void testFindWordsToSearchForDiagonalAscendingReverse() {
-		
+		String searchResult = wordSearchTest.findWord("UHURA");
+		assert(searchResult.equals(TestWordSearchStrings.firstDiagonalAscendingReverseCorrectResult));
 	}
-	
+	/*
 	@Test
 	public void testFindWordsToSearchForDiagonalDescendingReverse() {
 		
