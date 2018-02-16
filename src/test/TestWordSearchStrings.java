@@ -1,7 +1,7 @@
 package test;
 
 public final class TestWordSearchStrings {
-	public static final String firstTestFile = "./WordSearch1.txt";
+	public static final String firstTestFile = "./WordSearch1.csv";
 	public static final String firstWordsToSearchForString = "BONES,KHAN,KIRK,SCOTTY,SPOCK,SULU,UHURA";
 	public static final String firstBoggleBoardString = "U,M,K,H,U,L,K,I,N,V,J,O,C,W,E\n"
 			+ "L,L,S,H,K,Z,Z,W,Z,C,G,J,U,Y,G\n"
