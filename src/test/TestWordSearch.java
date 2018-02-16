@@ -37,12 +37,13 @@ public class TestWordSearch {
 		String searchResult = wordSearchTest.findWord("BONES");
 		assert(searchResult.equals(TestWordSearchStrings.firstVerticalCorrectResult));
 	}
-	/*
+	
 	@Test
 	public void testFindWordsToSearchForDiagonalAscending() {
-		
+		String searchResult = wordSearchTest.findWord("SPOCK");
+		assert(searchResult.equals(TestWordSearchStrings.firstDiagonalAscendingCorrectResult));
 	}
-	
+	/*
 	@Test
 	public void testFindWordsToSearchForDiagonalDescending() {
 		

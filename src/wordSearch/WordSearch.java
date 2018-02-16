@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -58,55 +55,51 @@ public class WordSearch {
 	private void loadWordMap() {
 		for(int x=0; x<numRows; x++) {
 			for(int y=0; y<numColumns; y++) {
-				getHorionztalWords(new LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>>(), 
-						new StringBuilder(), x, y);
-				getVerticalWords(new LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>>(), 
-						new StringBuilder(), x, y);
+				getHorionztalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+				getVerticalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+				getDiagonalAscendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 			}
 		}
 	}
 	
-	private Set<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>>
-		getVerticalWords(LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>> currentSet,
+	private void getDiagonalAscendingWords(ArrayList<Pair<Integer, Integer>> lastCoords,
 			StringBuilder currentWord, int x, int y) {
-		if(y >= numRows) {
-			return currentSet;
+		if(y <= 0 || x >= numColumns) {
+			return;
 		}
 
-		addEntryToMap(currentSet, currentWord, x, y);
-		
-		return getVerticalWords(currentSet, currentWord, x, y+1);
+		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
+		getDiagonalAscendingWords(lastCoords, currentWord, x+1, y-1);
 	}
 
-	private Set<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>> 
-		getHorionztalWords(LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>> currentSet, 
-				StringBuilder currentWord, int x, int y) {
-		if(x >= numColumns) {
-			return currentSet;
+	private void getVerticalWords(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
+		if(y >= numRows) {
+			return;
 		}
 
-		addEntryToMap(currentSet, currentWord, x, y);
-		
-		return getHorionztalWords(currentSet, currentWord, x+1, y);
+		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
+		getVerticalWords(lastCoords, currentWord, x, y+1);
+	}
+
+	private void getHorionztalWords(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
+		if(x >= numColumns) {
+			return;
+		}
+
+		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
+		getHorionztalWords(lastCoords, currentWord, x+1, y);
 	}
 	
-	private void addEntryToMap(LinkedHashSet<SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>> currentSet, 
-			StringBuilder currentWord, int x, int y) {
-		SimpleEntry<String, ArrayList<Pair<Integer, Integer>>> lastEntry = (currentSet.size() > 0) ? 
-				currentSet.stream().skip(currentSet.size()-1).findFirst().get() : 
-				null;
-		
+	private ArrayList<Pair<Integer, Integer>> addEntryToMap(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
 		Character currentChar = boggleBoard.get(y).get(x);
 		currentWord.append(currentChar);
 		String key = new String(currentWord.toString());
 		
-		ArrayList<Pair<Integer, Integer>> value = (currentSet.size() > 0) ? 
-				new ArrayList<Pair<Integer, Integer>>(lastEntry.getValue()) : 
-				new ArrayList<Pair<Integer, Integer>>();
+		ArrayList<Pair<Integer, Integer>> value = new ArrayList<Pair<Integer, Integer>>(lastCoords);
 		value.add(Pair.of(x, y));
 		
-		currentSet.add(new SimpleEntry<String, ArrayList<Pair<Integer, Integer>>>(key, value));
 		wordMap.put(key, value);
+		return value;
 	}
 	
 	public String findWordsToSearchFor() {
