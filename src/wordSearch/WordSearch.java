@@ -62,6 +62,7 @@ public class WordSearch {
 				getDiagonalAscendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 				getDiagonalAscendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 				getDiagonalDescendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+				getDiagonalDescendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 			}
 		}
 	}
@@ -94,6 +95,16 @@ public class WordSearch {
 
 		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
 		getDiagonalDescendingWords(lastCoords, currentWord, x+1, y+1);
+	}
+	
+	private void getDiagonalDescendingReverseWords(ArrayList<Pair<Integer, Integer>> lastCoords,
+			StringBuilder currentWord, int x, int y) {
+		if(y < 0 || x < 0) {
+			return;
+		}
+
+		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
+		getDiagonalDescendingReverseWords(lastCoords, currentWord, x-1, y-1);
 	}
 
 	private void getVerticalWords(ArrayList<Pair<Integer, Integer>> lastCoords, 

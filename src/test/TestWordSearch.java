@@ -67,15 +67,16 @@ public class TestWordSearch {
 		String searchResult = wordSearchTest.findWord("UHURA");
 		assert(searchResult.equals(TestWordSearchStrings.firstDiagonalAscendingReverseCorrectResult));
 	}
-	/*
+	
 	@Test
 	public void testFindWordsToSearchForDiagonalDescendingReverse() {
-		
+		String searchResult = wordSearchTest.findWord("SULU");
+		assert(searchResult.equals(TestWordSearchStrings.firstDiagonalDescendingReverseCorrectResult));
 	}
 	
 	@Test
 	public void testFindWordsToSearchFor() {
-		assert(wordSearchTest.getWordsToSearchForString().equals(TestWordSearchStrings.firstCorrectResult));
+		assert(searchResult.equals(TestWordSearchStrings.firstCorrectResult));
 	}
-	*/
+
 }
