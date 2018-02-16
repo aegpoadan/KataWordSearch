@@ -56,6 +56,7 @@ public class WordSearch {
 		for(int x=0; x<numRows; x++) {
 			for(int y=0; y<numColumns; y++) {
 				getHorionztalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+				getHorionztalReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 				getVerticalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 				getDiagonalAscendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
 				getDiagonalDescendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
@@ -99,6 +100,15 @@ public class WordSearch {
 
 		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
 		getHorionztalWords(lastCoords, currentWord, x+1, y);
+	}
+	
+	private void getHorionztalReverseWords(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
+		if(x <= 0) {
+			return;
+		}
+
+		lastCoords = addEntryToMap(lastCoords, currentWord, x, y);
+		getHorionztalReverseWords(lastCoords, currentWord, x-1, y);
 	}
 	
 	private ArrayList<Pair<Integer, Integer>> addEntryToMap(ArrayList<Pair<Integer, Integer>> lastCoords, StringBuilder currentWord, int x, int y) {
