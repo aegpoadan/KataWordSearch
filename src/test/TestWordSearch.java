@@ -40,7 +40,7 @@ public class TestWordSearch {
 	
 	@Test
 	public void testFindWordsToSearchForDiagonalAscending() {
-		String searchResult = wordSearchTest.findWord("SPOCK");
+		String searchResult = wordSearchTest.findWord("NED");
 		assert(searchResult.equals(TestWordSearchStrings.firstDiagonalAscendingCorrectResult));
 	}
 	/*

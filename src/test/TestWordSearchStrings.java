@@ -29,7 +29,7 @@ public final class TestWordSearchStrings {
 	public static final String firstHorizontalReverseCorrectResult = "KIRK: (4,7),(3,7),(2,7),(1,7)";
 	public static final String firstVerticalCorrectResult = "BONES: (0,6),(0,7),(0,8),(0,9),(0,10)";
 	public static final String firstVerticalReverseCorrectResult = "KHAN: (5,9),(5,8),(5,7),(5,6)";
-	public static final String firstDiagonalAscendingCorrectResult = "";
+	public static final String firstDiagonalAscendingCorrectResult = "NED: (6,12),(7,11),(8,10)";
 	public static final String firstDiagonalAscendingReverseCorrectResult = "UHURA: (4,0),(3,1),(2,2),(1,3),(0,4)";
 	public static final String firstDiagonalDescendingCorrectResult = "SPOCK: (2,1),(3,2),(4,3),(5,4),(6,5)";
 	public static final String firstDiagonalDescendingReverseCorrectResult = "SULU: (3,3),(2,2),(1,1),(0,0)";
