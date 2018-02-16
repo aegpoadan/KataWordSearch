@@ -5,64 +5,125 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+/**
+ * This class is to be used in finding a given set of words inside of a boggle board.
+ * 
+ * @author Andrew Hayes
+ */
 public class WordSearch {
 	private ArrayList<ArrayList<Character>> boggleBoard = new ArrayList<ArrayList<Character>>();
 	private ArrayList<String> wordsToSearchFor = new ArrayList<String>();
-	//first int in entry is x coordinate, second is y coordinate
-	private HashMap<String, ArrayList<Pair<Integer, Integer>>> wordMap = new HashMap<String, ArrayList<Pair<Integer, Integer>>>();
+	//first int in pair is x coordinate, second is y coordinate
+	private ConcurrentHashMap<String, ArrayList<Pair<Integer, Integer>>> wordMap = new ConcurrentHashMap<String, ArrayList<Pair<Integer, Integer>>>();
 	private int numColumns;
 	private int numRows;
+	private ForkJoinPool wordSearchPool = new ForkJoinPool();
+	private boolean parallel = false;
 	
-	public WordSearch(String path) throws IOException {
+	public WordSearch(String path) {
 		try {
 			String fileContent = new String(Files.readAllBytes(Paths.get(path)), Charset.defaultCharset());
 			String[] lines = fileContent.split("\n");
-			numRows = lines.length - 1;
-			numColumns = numRows;
-			int i = 0;
-			
-			for(String line: lines) {
-				String[] words = line.split(",");
-				if(i > 0 && words.length != numColumns) {
-					throw new IOException("WordSearch matrix is incorrectly formatted! Must be NxN");
-				}
-				
-				if(i == 0) {
-					for(String word: words) {
-						wordsToSearchFor.add(word);
-					}
-				} else {
-					ArrayList<Character> characters = new ArrayList<Character>();
-					for(String c: words) {
-						characters.add(c.charAt(0));
-					}
-					boggleBoard.add(characters);
-				}
-				
-				i++;
+			if(lines.length < 2) {
+				throw new IOException("File must be at least two lines long!");
 			}
 			
+			numRows = lines.length - 1;
+			numColumns = numRows;
+			
+			loadBoggleBoard(lines);
 			loadWordMap();
-		} catch(IOException E) {
-			System.err.println("Failed to read file at path: " + path);
+		} catch(IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	private void loadWordMap() {
-		for(int x=0; x<numRows; x++) {
-			for(int y=0; y<numColumns; y++) {
-				getHorionztalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
-				getHorionztalReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
-				getVerticalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
-				getVerticalReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
-				getDiagonalAscendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
-				getDiagonalAscendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
-				getDiagonalDescendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
-				getDiagonalDescendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+	public WordSearch(String path, boolean parallel) {
+		this.parallel = parallel;
+		try {
+			String fileContent = new String(Files.readAllBytes(Paths.get(path)), Charset.defaultCharset());
+			String[] lines = fileContent.split("\n");
+			if(lines.length < 2) {
+				throw new IOException("File must be at least two lines long!");
+			}
+			
+			numRows = lines.length - 1;
+			numColumns = numRows;
+			
+			loadBoggleBoard(lines);
+			loadWordMap();
+		} catch(IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadBoggleBoard(String[] lines) throws IOException {
+		int i = 0;
+		for(String line: lines) {
+			String[] words = line.split(",");
+			if(i > 0 && words.length != numColumns) {
+				throw new IOException("WordSearch matrix is incorrectly formatted! Must be NxN");
+			}
+			
+			if(i == 0) {
+				for(String word: words) {
+					wordsToSearchFor.add(word);
+				}
+			} else {
+				ArrayList<Character> characters = new ArrayList<Character>();
+				for(String c: words) {
+					characters.add(c.charAt(0));
+				}
+				boggleBoard.add(characters);
+			}
+			
+			i++;
+		}
+	}
+	
+	private void loadWordMap() throws InterruptedException, ExecutionException {
+		if(parallel) {
+			wordSearchPool.submit(() -> {
+				IntStream.range(0,numRows).parallel().forEach((x) -> {
+					IntStream.range(0, numColumns).parallel().forEach((y) -> {
+						getHorionztalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+						getHorionztalReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+						getVerticalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+						getVerticalReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+						getDiagonalAscendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+						getDiagonalAscendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+						getDiagonalDescendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+						getDiagonalDescendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+					});
+				});
+			}).get(); //wait until wordMap is done being populated
+		} else {
+			for(int x=0; x<numRows; x++) {
+				for(int y=0; y<numColumns; y++) {
+					getHorionztalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+					getHorionztalReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+					getVerticalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+					getVerticalReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+					getDiagonalAscendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+					getDiagonalAscendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+					getDiagonalDescendingWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+					getDiagonalDescendingReverseWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
+				}
 			}
 		}
 	}
