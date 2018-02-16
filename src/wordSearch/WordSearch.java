@@ -23,6 +23,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * compared to serial loading if dealing with small matrices.
  * 
  * @author Andrew Hayes
+ * @version 1.0
  */
 public class WordSearch {
 	private ArrayList<ArrayList<Character>> boggleBoard = new ArrayList<ArrayList<Character>>();
