@@ -2,7 +2,7 @@ package test.java;
 
 public final class TestWordSearchStrings {
 	public static final String firstTestFile = "./WordSearch1.csv";
-	public static final String firstWordsToSearchForString = "BONES,KHAN,KIRK,SCOTTY,SPOCK,SULU,UHURA";
+	public static final String firstWordsToSearchForString = "BONES,KHAN,KIRK,SCOTTY,SPOCK,SULU,UHURA,NED";
 	public static final String firstBoggleBoardString = "U,M,K,H,U,L,K,I,N,V,J,O,C,W,E\n"
 			+ "L,L,S,H,K,Z,Z,W,Z,C,G,J,U,Y,G\n"
 			+ "H,S,U,P,J,P,R,J,D,H,S,B,X,T,G\n"
@@ -24,7 +24,8 @@ public final class TestWordSearchStrings {
 			+ "SCOTTY: (0,5),(1,5),(2,5),(3,5),(4,5),(5,5)\n"
 			+ "SPOCK: (2,1),(3,2),(4,3),(5,4),(6,5)\n"
 			+ "SULU: (3,3),(2,2),(1,1),(0,0)\n"
-			+ "UHURA: (4,0),(3,1),(2,2),(1,3),(0,4)";
+			+ "UHURA: (4,0),(3,1),(2,2),(1,3),(0,4)\n"
+			+ "NED: (6,12),(7,11),(8,10)";
 	public static final String firstHorizontalCorrectResult = "SCOTTY: (0,5),(1,5),(2,5),(3,5),(4,5),(5,5)";
 	public static final String firstHorizontalReverseCorrectResult = "KIRK: (4,7),(3,7),(2,7),(1,7)";
 	public static final String firstVerticalCorrectResult = "BONES: (0,6),(0,7),(0,8),(0,9),(0,10)";
