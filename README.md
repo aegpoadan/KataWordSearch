@@ -9,5 +9,8 @@ cd KataWordSearch
 gradle test
 gradle run
 ```
-
 **Note:** This submission requires Java 1.8 or later to run
+___
+Gradle run output is dependent on the contents of ./src/main/resources/WordSearch1.csv
+
+Eclipse run output is dependent on the contents of ./WordSearch1.csv
