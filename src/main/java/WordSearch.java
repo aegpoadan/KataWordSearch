@@ -412,6 +412,8 @@ public class WordSearch {
 
 	public static void main(String[] args) {
 		WordSearch serialLoad = new WordSearch("./WordSearch1.csv");
+		System.out.println("Searching for words: " + serialLoad.getWordsToSearchForString());
+		System.out.println();
 		String serialResult = serialLoad.findWordsToSearchFor();
 		System.out.println("Results after serial load...");
 		System.out.println("******************************************************");
