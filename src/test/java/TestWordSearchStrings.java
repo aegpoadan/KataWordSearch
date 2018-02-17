@@ -1,4 +1,4 @@
-package test;
+package test.java;
 
 public final class TestWordSearchStrings {
 	public static final String firstTestFile = "./WordSearch1.csv";

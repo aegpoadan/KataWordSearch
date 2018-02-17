@@ -1,8 +1,8 @@
-package test;
+package test.java;
 
 import org.junit.Test;
 
-import wordSearch.WordSearch;
+import main.java.WordSearch;
 
 public class TestWordSearch {
 	private WordSearch wordSearchTest;
