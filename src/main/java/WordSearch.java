@@ -5,6 +5,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -29,7 +31,7 @@ public class WordSearch {
 	private ArrayList<ArrayList<Character>> boggleBoard = new ArrayList<ArrayList<Character>>();
 	private ArrayList<String> wordsToSearchFor = new ArrayList<String>();
 	//first int in pair is x coordinate, second is y coordinate
-	private ConcurrentHashMap<String, ArrayList<Pair<Integer, Integer>>> wordMap = new ConcurrentHashMap<String, ArrayList<Pair<Integer, Integer>>>();
+	private Map<String, ArrayList<Pair<Integer, Integer>>> wordMap;
 	private int numColumns;
 	private int numRows;
 	private ForkJoinPool wordSearchPool = new ForkJoinPool();
@@ -135,6 +137,8 @@ public class WordSearch {
 	 */
 	private void loadWordMap() throws InterruptedException, ExecutionException {
 		if(parallel) {
+			this.wordMap = new ConcurrentHashMap<String, ArrayList<Pair<Integer, Integer>>>();
+			
 			wordSearchPool.submit(() -> {
 				IntStream.range(0,numRows).parallel().forEach((x) -> {
 					IntStream.range(0, numColumns).parallel().forEach((y) -> {
@@ -150,6 +154,8 @@ public class WordSearch {
 				});
 			}).get(); //wait until wordMap is done being populated
 		} else {
+			this.wordMap = new HashMap<String, ArrayList<Pair<Integer, Integer>>>();
+			
 			for(int x=0; x<numRows; x++) {
 				for(int y=0; y<numColumns; y++) {
 					getHorionztalWords(new ArrayList<Pair<Integer, Integer>>(), new StringBuilder(), x, y);
@@ -384,7 +390,7 @@ public class WordSearch {
 			result.append(word + ",");
 		}
 		result.deleteCharAt(result.length() - 1);
-		
+
 		return result.toString();
 	}
 	
